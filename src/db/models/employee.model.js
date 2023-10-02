@@ -35,7 +35,7 @@ const EmployeeSchema = {
     },
     phone: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
     identification: {
         type: DataTypes.STRING,

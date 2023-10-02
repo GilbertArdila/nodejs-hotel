@@ -33,6 +33,16 @@ const ReservationSchema = {
         allowNull: false,
         field: 'total_amount'
     },
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'created_at'
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: 'updated_at'
+    }
 };
 
 class Reservation extends Model {
