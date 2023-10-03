@@ -17,4 +17,4 @@ function setupModels(sequelize) {
   Reservation.associate(sequelize.models);
 }
 
-module.exports = { setupModels };
+module.exports =  setupModels ;

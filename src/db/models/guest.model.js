@@ -75,3 +75,9 @@ class Guest extends Model {
         }
     }
 }
+
+module.exports = {
+    GuestSchema,
+    Guest,
+    GUEST_TABLE
+};

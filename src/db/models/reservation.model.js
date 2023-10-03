@@ -1,4 +1,4 @@
-import {Model, DataTypes, Sequelize } from 'sequelize';
+const {Model, DataTypes, Sequelize } = require('sequelize');
 
 const RESERVATION_TABLE = 'reservations';
 const ReservationSchema = {

@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
 
-const id = joi.number().integer();
-const nickname = joi.string().max(50);
-const email = joi.string().email();
-const password = joi.string().max(8);
-const role = joi.string().max(5);
-const recoveryToken = joi.string().max(255);
-const createdAt = joi.date();
-const updatedAt = joi.date();
+const id = Joi.number().integer();
+const nickname = Joi.string().max(50);
+const email = Joi.string().email();
+const password = Joi.string().max(8);
+const role = Joi.string().max(5);
+const recoveryToken = Joi.string().max(255);
+const createdAt = Joi.date();
+const updatedAt = Joi.date();
 
 
 const createUserSchema = Joi.object({
