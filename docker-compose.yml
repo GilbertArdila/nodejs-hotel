@@ -15,7 +15,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin
+      - PGADMIN_DEFAULT_EMAIL=gilbertferney@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=admin123
     ports:
       - 5050:80
