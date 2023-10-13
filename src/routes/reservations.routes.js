@@ -101,7 +101,7 @@ router.post(
 );
 
 //update a reservation
-router.put(
+router.patch(
   "/:id",
   validatorHandler(getReservationSchema, "params"),
   validatorHandler(updateReservationSchema, "body"),

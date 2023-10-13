@@ -8,6 +8,7 @@ const {
   getRoomSchema,
   getRoomByTypeSchema,
   getRoomByStatusSchema,
+  getRoomByNumberSchema,
   deleteRoomSchema,
 } = require("../schemas/room.dto");
 
@@ -62,6 +63,20 @@ router.get(
     try {
       const { status } = req.params;
       const room = await service.findByStatus(status);
+      res.json(room);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+//get one room by number
+router.get(
+  "/number/:number",
+  validatorHandler(getRoomByNumberSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { number } = req.params;
+      const room = await service.findByNumber(number);
       res.json(room);
     } catch (error) {
       next(error);

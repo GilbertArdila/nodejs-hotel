@@ -12,7 +12,7 @@ const createRoomSchema = Joi.object({
     number: number.required(),
     type: type.required(),
     price: price.required(),
-    status: status.required(),
+    status: status,
     createdAt: createdAt,
     updatedAt: updatedAt
 })
@@ -34,6 +34,9 @@ const getRoomByTypeSchema = Joi.object({
 const getRoomByStatusSchema = Joi.object({
     status: status.required()
 })
+const getRoomByNumberSchema = Joi.object({
+    number: number.required()
+})
 
 const deleteRoomSchema = Joi.object({
     id: id.required()
@@ -45,7 +48,8 @@ module.exports = {
     getRoomSchema,
     getRoomByTypeSchema,
     getRoomByStatusSchema,
-    deleteRoomSchema
+    deleteRoomSchema,
+    getRoomByNumberSchema
 }
 
 

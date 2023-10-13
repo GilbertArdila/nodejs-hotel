@@ -15,12 +15,17 @@ class RoomService{
         }
     
         async find(){
-            const rooms = await models.Room.findAll();
+            const rooms = await models.Room.findAll({
+                include:['reservation']
+            });
             return rooms;
         }
     
         async findOne(id){
-            const room = await models.Room.findByPk(id);
+            const room = await models.Room.findByPk(id,{
+                include:['reservation']
+            }
+                );
             if (!room){
                 throw boom.notFound('Room not found');
             }
@@ -32,8 +37,8 @@ class RoomService{
                     type: type
                 }
             });
-            if (!room){
-                throw boom.notFound('Room not found');
+            if (room.length < 1){
+                throw boom.notFound('Sorry we can not find a room with this specific type, please check your request again');
             }
             return room;
         }
@@ -44,8 +49,8 @@ class RoomService{
                     status: status
                 }
             });
-            if (!room){
-                throw boom.notFound('Room not found');
+            if (room.length < 1 ){
+                throw boom.notFound('Sorry we can not find a room with that specific status, please check again your request');
             }
             return room;
         }
@@ -57,13 +62,13 @@ class RoomService{
                 }
             });
             if (!room){
-                throw boom.notFound('Room not found');
+                throw boom.notFound('We are sorry, can not find that number of room');
             }
             return room;
         }
     
         async update(id, changes){
-            const roomFound = await this.findByPk(id);
+            const roomFound = await models.Room.findByPk(id);
             if(!roomFound){
                 throw boom.notFound('Room not found');
             }
@@ -72,7 +77,7 @@ class RoomService{
         }
     
         async delete(id){
-            const roomFound = await this.findByPk(id);
+            const roomFound = await models.Room.findByPk(id);
             if(!roomFound){
                 throw boom.notFound('Room not found');
             }

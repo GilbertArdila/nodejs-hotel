@@ -33,7 +33,7 @@ class EmployeeService{
             }
         });
         if (!employee){
-            throw boom.notFound('Employee not found');
+            throw boom.notFound('We can not find any email coincidence, please try again or check your email info');
         }
         return employee;
     }
@@ -56,13 +56,17 @@ class EmployeeService{
                 status: status
             }
         });
-        if (!employee){
-            throw boom.notFound('Employee not found');
+        if (employee.length <1){
+            throw boom.notFound('Sorry, we can not find any employee with that specific status, please check the sended information');
         }
         return employee;
     }
 
     async update(id, employee){
+        const actualEmployee = await models.Employee.findByPk(id)
+        if(!actualEmployee){
+            throw boom.notFound('Sorry, we can not find any employee with that specific id, please check the sended information');
+        }
         const updateEmployee = await models.Employee.update(employee,{
             where: {
                 id: id
@@ -72,12 +76,17 @@ class EmployeeService{
     }
 
     async delete(id){
-        const deleteEmployee = await models.Employee.destroy({
+        const employee = await models.Employee.findByPk(id);
+        if(!employee){
+            throw boom.notFound('Sorry, we can not find any employee with that specific id, please check the sended information');
+        }
+         await models.Employee.destroy({
             where: {
                 id: id
             }
         });
-        return deleteEmployee;
+        
+        return id;
     }
 }
 

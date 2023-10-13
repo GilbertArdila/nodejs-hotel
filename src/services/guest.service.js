@@ -2,7 +2,7 @@ const boom = require('@hapi/boom');
 const {models} = require('../libs/sequelize');
 
 
-class GuestSrvice{
+class GuestService{
     constructor(){
 
     }
@@ -22,7 +22,9 @@ class GuestSrvice{
     }
 
     async findOne(id){
-        const guest = await models.Guest.findByPk(id);
+        const guest = await models.Guest.findByPk(id,{
+            include:['reservation']
+        });
         if (!guest){
             throw boom.notFound('Guest not found');
         }
@@ -65,16 +67,20 @@ class GuestSrvice{
     }
 
     async update(id, changes){
-        const guestFound = await this.findByPk(id);
+        const guestFound = await models.Guest.findByPk(id);
         if(!guestFound){
             throw boom.notFound('Guest not found');
         }
-        const response = await guestFound.update(changes);
+        const response = await  models.Guest.update(changes,{
+            where:{
+                id:id
+            }
+        });
         return response;
     }
 
     async delete(id){
-        const guestFound = await this.findByPk(id);
+        const guestFound = await models.Guest.findByPk(id);
         if(!guestFound){
             throw boom.notFound('Guest not found');
         }
@@ -83,4 +89,4 @@ class GuestSrvice{
     }
 }
 
-module.exports = GuestSrvice;
+module.exports = GuestService;

@@ -15,7 +15,7 @@ class ReservationService{
 
     async find(){
         const reservations = await models.Reservation.findAll({
-            include:['room']
+            include:['room','guest']
         });
         return reservations;
     }
@@ -65,20 +65,24 @@ class ReservationService{
     }
 
     async update(id, changes){
-        const reservationFound = await this.findByPk(id);
+        const reservationFound = await models.Reservation.findByPk(id);
         if(!reservationFound){
             throw boom.notFound('Reservation not found');
         }
-        const response = await reservationFound.update(changes);
+        const response = await  models.Reservation.update(changes,{
+            where:{
+                id:id
+            }
+        });
         return response;
     }
 
     async delete(id){
-        const reservationFound = await this.findByPk(id);
+        const reservationFound = await  models.Reservation.findByPk(id);
         if(!reservationFound){
             throw boom.notFound('Reservation not found');
         }
-        await reservationFound.destroy();
+        await  models.Reservation.destroy();
         return {message: 'Reservation deleted'};
     }
 }

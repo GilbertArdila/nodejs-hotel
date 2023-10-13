@@ -30,6 +30,9 @@ class UserService{
                 email: email
             }
         });
+        if(!user){
+            throw boom.notFound('Sorry we can not find any email coincidence in our data base, please check your email again');
+        }
         return user;
     }
 
@@ -39,6 +42,9 @@ class UserService{
                 role: role
             }
         });
+        if(!users){
+            throw boom.notFound('Sorry we can not find any user with that specific role, please check it again');
+        }
         return users;
     }
 
@@ -51,7 +57,7 @@ class UserService{
     }
 
     async update(id, changes){
-        const userFound = await this.findByPk(id);
+        const userFound = await models.User.findByPk(id);
         if(!userFound){
             throw boom.notFound('User not found');
         }
@@ -62,7 +68,7 @@ class UserService{
     }
 
     async delete(id){
-        const userFound = await this.findByPk(id);
+        const userFound = await models.User.findByPk(id);
         if(!userFound){
             throw boom.notFound('User not found');
         }

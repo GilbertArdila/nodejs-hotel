@@ -71,6 +71,7 @@ router.get(
   }
 );
 
+
 // create a new guest
 router.post(
   "/",
@@ -87,7 +88,7 @@ router.post(
 );
 
 // update a guest
-router.put(
+router.patch(
   "/:id",
   validatorHandler(getGuestSchema, "params"),
   validatorHandler(updateGuestSchema, "body"),

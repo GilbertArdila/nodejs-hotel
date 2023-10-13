@@ -15,7 +15,7 @@ const createUserSchema = Joi.object({
     nickname: nickname.required(),
     email: email.required(),
     password: password.required(),
-    role: role.required(), 
+    role: role, 
     createdAt: createdAt,
     updatedAt: updatedAt
 });

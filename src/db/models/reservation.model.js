@@ -1,4 +1,6 @@
-const {Model, DataTypes, Sequelize } = require('sequelize');
+const {Model, DataTypes} = require('sequelize');
+const {GUEST_TABLE} = require('./guest.model')
+const {ROOM_TABLE} = require('./room.model')
 
 const RESERVATION_TABLE = 'reservations';
 const ReservationSchema = {
@@ -21,12 +23,24 @@ const ReservationSchema = {
     roomId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'room_id'
+        field: 'room_id',
+        references:{
+            model:ROOM_TABLE,
+            key:'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete:'SET NULL'
     },
     guestId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'guest_id'
+        field: 'guest_id',
+        references:{
+            model:GUEST_TABLE,
+            key:'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete:'SET NULL'
     },
     totalAmount: {
         type: DataTypes.DECIMAL(10,2),
@@ -47,10 +61,10 @@ const ReservationSchema = {
 
 class Reservation extends Model {
     //one reservation has one room
-    //one reservation has many guests
+    //one reservation has one guests
     static associate(models) {
-        this.belongsTo(models.Room, {foreignKey: 'roomId', as: 'room'});
-        this.hasMany(models.Guest, {foreignKey: 'guestId', as: 'guests'});
+        this.belongsTo(models.Room, { as: 'room'});
+        this.belongsTo(models.Guest, { as: 'guest'});
     }
 
     static config(sequelize) {

@@ -39,10 +39,10 @@ const RoomSchema = {
 
 class Room extends Model {
     //one room has many reservations
-    //one room has many guests
+    
     static associate(models) {
-        this.hasMany(models.Reservation, {foreignKey: 'roomId', as: 'reservations'});
-        this.hasMany(models.Guest, {foreignKey: 'roomId', as: 'guests'});
+        this.hasMany(models.Reservation, {foreignKey: 'roomId', as: 'reservation'});
+        
     }
     
 

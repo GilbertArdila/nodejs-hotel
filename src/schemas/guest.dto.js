@@ -6,11 +6,11 @@ const middleName = Joi.string().max(50);
 const lastName = Joi.string().max(50);
 const motherLastName = Joi.string().max(50);
 const email = Joi.string().email();
-const phone = Joi.string().max(10);
+const phone = Joi.string().max(13);
 const identification = Joi.string().max(30);
-const reservationId = Joi.number().integer();
 const createdAt = Joi.date();
 const updatedAt = Joi.date();
+
 
 const createGuestSchema = Joi.object({
     firstName: firstName.required(),
@@ -20,7 +20,6 @@ const createGuestSchema = Joi.object({
     email: email.required(),
     phone: phone.required(),
     identification: identification.required(),
-    reservationId: reservationId,
     createdAt: createdAt,
     updatedAt: updatedAt
 });
@@ -33,7 +32,8 @@ const updateGuestSchema = Joi.object({
     email: email,
     phone: phone,
     identification: identification,
-    reservationId: reservationId,
+    
+    
 });
 
 const getGuestSchema = Joi.object({
@@ -47,6 +47,8 @@ const getGuestByEmailSchema = Joi.object({
 const getGuestByIdentificationSchema = Joi.object({
     identification: identification.required()
 });
+
+
 
 const deleteGuestSchema = Joi.object({
     id: id.required()

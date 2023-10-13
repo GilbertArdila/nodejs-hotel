@@ -1,5 +1,6 @@
 const {Model, DataTypes, Sequelize } = require('sequelize');
 
+
 const GUEST_TABLE = 'guests';
 const GuestSchema = {
     id: {
@@ -43,11 +44,6 @@ const GuestSchema = {
         allowNull: false,
         unique: true
     },
-    reservationId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        field: 'reservation_id'
-    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.NOW,
@@ -63,7 +59,7 @@ const GuestSchema = {
 class Guest extends Model {
     //one guest has many reservations
     static associate(models) {
-        this.belongsTo(models.Reservation, {foreignKey: 'reservationId', as: 'reservation'});
+        this.hasMany(models.Reservation, {foreignKey: 'guestId', as: 'reservation'});
     }
 
     static config(sequelize) {
