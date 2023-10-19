@@ -21,6 +21,10 @@ class UserService{
 
     async find(){
         const users = await models.User.findAll();
+
+        users.forEach(user =>{
+            delete user.dataValues.password;
+        })
         return users;
     }
 
@@ -33,6 +37,7 @@ class UserService{
         if(!user){
             throw boom.notFound('Sorry we can not find any email coincidence in our data base, please check your email again');
         }
+        delete user.dataValues.password;
         return user;
     }
 
@@ -45,6 +50,9 @@ class UserService{
         if(!users){
             throw boom.notFound('Sorry we can not find any user with that specific role, please check it again');
         }
+        users.forEach(user =>{
+            delete user.dataValues.password;
+        })
         return users;
     }
 
@@ -53,6 +61,7 @@ class UserService{
         if (!user){
             throw boom.notFound('User not found');
         }
+        delete user.dataValues.password;
         return user;
     }
 
