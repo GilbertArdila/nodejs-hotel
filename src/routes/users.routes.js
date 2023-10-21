@@ -12,6 +12,108 @@ const {
 const router = express.Router();
 const service = new UserService();
 
+
+
+router.get("/", async (req, res, next) => {
+  try {
+    const users = await service.find();
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
+router.get(
+  "/:id",
+  validatorHandler(getUserSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = await service.findOne(id);
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+router.get("/email/:email", async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const user = await service.findByEmail(email);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+router.get("/role/:role", async (req, res, next) => {
+  try {
+    const { role } = req.params;
+    const users = await service.findByRole(role);
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+router.post(
+  "/",
+  validatorHandler(createUserSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newUser = await service.create(body);
+      res.status(201).json(newUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+
+router.patch(
+  "/:id",
+  validatorHandler(getUserSchema, "params"),
+  validatorHandler(updateUserSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const newDataUser = await service.update(id, body);
+      res.json(newDataUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+router.delete(
+  "/:id",
+  validatorHandler(deleteUserSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.delete(id);
+      res.json(`User with id ${id} deleted`);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+module.exports = router;
+
+
+        /** --------------------------- Swagger documentation --------------------------- */
+
 /**
  * @swagger
  * components:
@@ -62,15 +164,6 @@ const service = new UserService();
  *                $ref: '#/components/schemas/User'
  */
 
-router.get("/", async (req, res, next) => {
-  try {
-    const users = await service.find();
-    res.json(users);
-  } catch (error) {
-    next(error);
-  }
-});
-
 /**
  * @swagger
  * /api/v1/users/{id}:
@@ -95,21 +188,6 @@ router.get("/", async (req, res, next) => {
  *      404:
  *        description: User not found
  */
-
-router.get(
-  "/:id",
-  validatorHandler(getUserSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const user = await service.findOne(id);
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 /**
  * @swagger
  * /api/v1/users/email/{email}:
@@ -134,16 +212,30 @@ router.get(
  *      404:
  *        description: Sorry we can not find any email coincidence in our data base, please check your email again
  */
-router.get("/email/:email", async (req, res, next) => {
-  try {
-    const { email } = req.params;
-    const user = await service.findByEmail(email);
-    res.json(user);
-  } catch (error) {
-    next(error);
-  }
-});
-
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *  delete:
+ *    summary: delete one speciffic user according to the id
+ *    tags: [User]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: user id
+ *    responses:
+ *      200:
+ *        description: User with id ${id} deleted
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/User'
+ *      404:
+ *        description: User not found
+ */
 /**
  * @swagger
  * /api/v1/users/role/{role}:
@@ -168,46 +260,6 @@ router.get("/email/:email", async (req, res, next) => {
  *      404:
  *        description: Sorry we can not find any user with that specific role, please check it again
  */
-router.get("/role/:role", async (req, res, next) => {
-  try {
-    const { role } = req.params;
-    const users = await service.findByRole(role);
-    res.json(users);
-  } catch (error) {
-    next(error);
-  }
-});
-
-/**
- * @swagger
- * /api/v1/users:
- *  post:
- *    summary: this is the endpoint to create a user
- *    tags: [User]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            $ref: '#/components/schemas/User'
- *    responses:
- *      200:
- *        description: returns the new user data
- */
-router.post(
-  "/",
-  validatorHandler(createUserSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newUser = await service.create(body);
-      res.status(201).json(newUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 /**
  * @swagger
@@ -241,58 +293,20 @@ router.post(
  *        description: User not found
  */
 
-router.patch(
-  "/:id",
-  validatorHandler(getUserSchema, "params"),
-  validatorHandler(updateUserSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const newDataUser = await service.update(id, body);
-      res.json(newDataUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 /**
  * @swagger
- * /api/v1/users/{id}:
- *  delete:
- *    summary: delete one speciffic user according to the id
+ * /api/v1/users:
+ *  post:
+ *    summary: this is the endpoint to create a user
  *    tags: [User]
- *    parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: user id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/User'
  *    responses:
  *      200:
- *        description: User with id ${id} deleted
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: '#/components/schemas/User'
- *      404:
- *        description: User not found
+ *        description: returns the new user data
  */
-router.delete(
-  "/:id",
-  validatorHandler(deleteUserSchema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.json(`User with id ${id} deleted`);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-module.exports = router;

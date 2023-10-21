@@ -132,3 +132,223 @@ router.delete(
 );
 
 module.exports = router;
+
+ /** --------------------------- Swagger documentation --------------------------- */
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Room:
+ *      type: object
+ *      properties:
+ *        number:
+ *          type: integer
+ *          description: the number of the room
+ *        type:
+ *          type: string
+ *          description: the room type could be single, double, triple or  suite
+ *        price:
+ *          type: decimal
+ *          description: the price of the room for each night
+ *        status:
+ *          type: string
+ *          description: the actual room status could available, occupied or maintenance
+ *      required:
+ *        - number
+ *        - type
+ *        - price
+ *      example:
+ *        number: 1001
+ *        type: triple
+ *        price: 26.53
+ */
+
+
+/**
+ * @swagger
+ * /api/v1/rooms:
+ *  get:
+ *    summary: return all rooms
+ *    tags: [Room]
+ *    responses:
+ *      200:
+ *        description: returns all rooms
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Room'
+ */
+
+/**
+ * @swagger
+ * /api/v1/rooms/{id}:
+ *  get:
+ *    summary: return one specific room according with the id
+ *    tags: [Room]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: room id
+ *    responses:
+ *      200:
+ *        description: returns one room
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Room'
+ *      404:
+ *        description: Room not found
+ */
+/**
+ * @swagger
+ * /api/v1/rooms/type/{type}:
+ *  get:
+ *    summary: return the rooms  with the speciffic type
+ *    tags: [Room]
+ *    parameters:
+ *      - in: path
+ *        name: type
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: room type
+ *    responses:
+ *      200:
+ *        description: returns a list of rooms
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Room'
+ *      404:
+ *        description: Sorry we can not find a room with this specific type, please check your request again
+ */
+/**
+ * @swagger
+ * /api/v1/rooms/{id}:
+ *  delete:
+ *    summary: delete one speciffic room according to the id
+ *    tags: [Room]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: room id
+ *    responses:
+ *      200:
+ *        description: Room deleted
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Room'
+ *      404:
+ *        description: Room not found
+ */
+/**
+ * @swagger
+ * /api/v1/rooms/status/{status}:
+ *  get:
+ *    summary: return a list of rooms according with the status
+ *    tags: [Room]
+ *    parameters:
+ *      - in: path
+ *        name: status
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: room status
+ *    responses:
+ *      200:
+ *        description: returns all the rooms with that specific status
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Room'
+ *      404:
+ *        description: Sorry we can not find a room with that specific status, please check again your request
+ */
+/**
+ * @swagger
+ * /api/v1/rooms/number/{number}:
+ *  get:
+ *    summary: return a rooms according with the number
+ *    tags: [Room]
+ *    parameters:
+ *      - in: path
+ *        name: number
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: room number
+ *    responses:
+ *      200:
+ *        description: returns one the rooms with the number received
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Room'
+ *      404:
+ *        description: We are sorry, can not find that number of room
+ */
+
+/**
+ * @swagger
+ * /api/v1/rooms/{id}:
+ *  patch:
+ *    summary: update one speciffic room according to the id
+ *    tags: [Room]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Room'
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: room id
+ *    responses:
+ *      200:
+ *        description: returns the room info updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Room'
+ *      404:
+ *        description: Room not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/rooms:
+ *  post:
+ *    summary: this is the endpoint to create a room
+ *    tags: [Room]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Room'
+ *    responses:
+ *      200:
+ *        description: returns the new room data
+ */

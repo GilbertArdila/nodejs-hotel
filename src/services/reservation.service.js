@@ -71,7 +71,7 @@ class ReservationService {
       },
     });
     if (!reservation) {
-      throw boom.notFound("Reservation not found");
+      throw boom.notFound("Sorry we can not found any reservation linked to that room");
     }
     return reservation;
   }
@@ -83,7 +83,7 @@ class ReservationService {
       },
     });
     if (!reservation) {
-      throw boom.notFound("Reservation not found");
+      throw boom.notFound("Sorry we can not found any reservation linked to that gest");
     }
     return reservation;
   }

@@ -54,17 +54,7 @@ class GuestService{
         }
         return guest;
     }
-    async findByReservationId(reservationId){
-        const guest = await models.Guest.findOne({
-            where: {
-                reservationId: reservationId
-            }
-        });
-        if (!guest){
-            throw boom.notFound('Guest not found');
-        }
-        return guest;
-    }
+    
 
     async update(id, changes){
         const guestFound = await models.Guest.findByPk(id);
