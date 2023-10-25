@@ -14,6 +14,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 //cors
 const cors = require("cors");
 
+
 // swagger specifications
 const swaggerSpec = {
   definition: {
@@ -59,6 +60,9 @@ const options = {
   },
 };
 app.use(cors(options));
+
+//llamando las estrategias
+require('./src/auth');
 
 app.get("/", (req, res) => {
   res.send("Hello World con Node.js!");

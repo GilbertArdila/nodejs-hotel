@@ -8,13 +8,15 @@ class UserService{
   }
 
     async create(user){
+        //encriptamos el password
         const hashedPassword = await bcrypt.hash(user.password, 10);
 
-        
+        //actualizamos el password en la información recibida
         const newUser = await models.User.create({
             ...user,
             password: hashedPassword
         });
+        //borramos el password de la data retornada
         delete newUser.dataValues.password;
         return newUser;
     }
@@ -35,9 +37,9 @@ class UserService{
             }
         });
         if(!user){
-            throw boom.notFound('Sorry we can not find any email coincidence in our data base, please check your email again');
+            throw boom.notFound('sorry, please check your information again');
         }
-        delete user.dataValues.password;
+        
         return user;
     }
 
