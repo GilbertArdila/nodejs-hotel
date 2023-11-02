@@ -2,7 +2,8 @@
 
 ## Introducción
 
-Esta API está diseñada para gestionar información relacionada con empleados, invitados, reservaciones, habitaciones y usuarios. Para consultar la información se debe hacer login en el path `auth/login`, allí se obtiene un token para la autorización, los endpoints de crear, actualizar y borrar, así como los endpoints relacionados con la consulta y manejo de usuarios solo pueden ser consumidos por usuarios con rol de administradores. Se utiliza Swagger para la documentación, y puedes consultarla mediante el endpoint `/api-docs`.
+Esta API está diseñada para gestionar información relacionada con empleados, invitados, reservaciones, habitaciones y usuarios.
+Se usan las librerías Boom y Joi para el manejo de errores y schemas o DTO's. Para consultar la información se debe hacer login en el path `auth/login`, allí se obtiene un token para la autorización, los endpoints de crear, actualizar y borrar, así como los endpoints relacionados con la consulta y manejo de usuarios solo pueden ser consumidos por usuarios con rol de administradores. Se utiliza Swagger para la documentación, y puedes consultarla mediante el endpoint `/api-docs`.
 
 ## Endpoints
 
