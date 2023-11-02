@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 
 const EmployeeService = require("../services/employee.service");
 const validatorHandler = require("../middlewares/validator.handler");
@@ -15,7 +16,7 @@ const {
 const router = express.Router();
 const service = new EmployeeService();
 
-//get all employees
+
 router.get("/", async (req, res, next) => {
   try {
     const employees = await service.find();
@@ -25,7 +26,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// get one employee by id
+
 router.get(
   "/:id",
   validatorHandler(getEmployeeSchema, "params"),
@@ -40,7 +41,7 @@ router.get(
   }
 );
 
-//get one employee by email
+
 router.get(
   "/email/:email",
   validatorHandler(getEmployeeByEmailSchema, "params"),
@@ -55,7 +56,7 @@ router.get(
   }
 );
 
-//get one employee by identification
+
 router.get(
   "/identification/:identification",
   validatorHandler(getEmployeeByIdentificationSchema, "params"),
@@ -70,7 +71,7 @@ router.get(
   }
 );
 
-//get one employee by status
+
 router.get(
   "/status/:status",
   validatorHandler(getEmployeeByStatusSchema, "params"),
@@ -85,9 +86,10 @@ router.get(
   }
 );
 
-//create one employee
 router.post(
   "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(createEmployeeSchema, "body"),
   async (req, res, next) => {
     try {
@@ -100,9 +102,10 @@ router.post(
   }
 );
 
-//update one employee
 router.patch(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(getEmployeeSchema, "params"),
   validatorHandler(updateEmployeeSchema, "body"),
   async (req, res, next) => {
@@ -117,9 +120,10 @@ router.patch(
   }
 );
 
-//delete one employee
 router.delete(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(deleteEmployeeSchema, "params"),
   async (req, res, next) => {
     try {
@@ -134,7 +138,7 @@ router.delete(
 
 module.exports = router;
 
- /** --------------------------- Swagger documentation --------------------------- */
+/** --------------------------- Swagger documentation --------------------------- */
 
 /**
  * @swagger
@@ -180,7 +184,6 @@ module.exports = router;
  *        phone: +513102259987
  *        identification: EC45962
  */
-
 
 /**
  * @swagger
@@ -295,7 +298,7 @@ module.exports = router;
  *      404:
  *        description: Employee not found
  */
-/** 
+/**
  * /**
  * @swagger
  * /api/v1/employees/status/{status}:
@@ -320,7 +323,7 @@ module.exports = router;
  *      404:
  *        description: Sorry, we can not find any employee with that specific status, please check the sended information
  */
-/** 
+/**
  * @swagger
  * /api/v1/employees/{id}:
  *  patch:

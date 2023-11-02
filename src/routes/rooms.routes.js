@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 
 const RoomService = require("../services/room.service");
 const validatorHandler = require("../middlewares/validator.handler");
@@ -15,7 +16,6 @@ const {
 const router = express.Router();
 const service = new RoomService();
 
-//get all rooms
 router.get("/", async (req, res, next) => {
   try {
     const rooms = await service.find();
@@ -25,7 +25,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// get one room by id
 router.get(
   "/:id",
   validatorHandler(getRoomSchema, "params"),
@@ -40,7 +39,6 @@ router.get(
   }
 );
 
-//get one room by type
 router.get(
   "/type/:type",
   validatorHandler(getRoomByTypeSchema, "params"),
@@ -55,7 +53,6 @@ router.get(
   }
 );
 
-//get one room by status
 router.get(
   "/status/:status",
   validatorHandler(getRoomByStatusSchema, "params"),
@@ -69,7 +66,7 @@ router.get(
     }
   }
 );
-//get one room by number
+
 router.get(
   "/number/:number",
   validatorHandler(getRoomByNumberSchema, "params"),
@@ -84,9 +81,10 @@ router.get(
   }
 );
 
-//create a new room
 router.post(
   "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(createRoomSchema, "body"),
   async (req, res, next) => {
     try {
@@ -99,9 +97,10 @@ router.post(
   }
 );
 
-//update a room
 router.patch(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(getRoomSchema, "params"),
   validatorHandler(updateRoomSchema, "body"),
   async (req, res, next) => {
@@ -116,9 +115,10 @@ router.patch(
   }
 );
 
-//delete a room
 router.delete(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(deleteRoomSchema, "params"),
   async (req, res, next) => {
     try {
@@ -133,7 +133,7 @@ router.delete(
 
 module.exports = router;
 
- /** --------------------------- Swagger documentation --------------------------- */
+/** --------------------------- Swagger documentation --------------------------- */
 
 /**
  * @swagger
@@ -163,7 +163,6 @@ module.exports = router;
  *        type: triple
  *        price: 26.53
  */
-
 
 /**
  * @swagger

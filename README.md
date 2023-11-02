@@ -59,7 +59,7 @@ A continuación, se describen los endpoints disponibles:
       - - Consulta por Fecha de Check-in
           URL: /reservations/checkin/:date
           Método: GET
-          Descripción: Obtiene reservaciones basadas en la fecha de check-in.
+          Descripción: Obtiene reservaciones basadas en la fecha de check-in, el formato debe ser como este 12-25-03 (MM/DD/YY)
       - - Consulta por ID de Cuarto
           URL: /reservations/room/:room
           Método: GET

@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 
 const GuestService = require("../services/guest.service");
 const validatorHandler = require("../middlewares/validator.handler");
@@ -14,7 +15,6 @@ const {
 const router = express.Router();
 const service = new GuestService();
 
-//get all guests
 router.get("/", async (req, res, next) => {
   try {
     const guests = await service.find();
@@ -24,7 +24,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// get one guest by id
 router.get(
   "/:id",
   validatorHandler(getGuestSchema, "params"),
@@ -39,7 +38,6 @@ router.get(
   }
 );
 
-//get one guest by email
 router.get(
   "/email/:email",
 
@@ -55,7 +53,6 @@ router.get(
   }
 );
 
-//get one guest by identification
 router.get(
   "/identification/:identification",
 
@@ -71,10 +68,10 @@ router.get(
   }
 );
 
-
-// create a new guest
 router.post(
   "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(createGuestSchema, "body"),
   async (req, res, next) => {
     try {
@@ -87,9 +84,10 @@ router.post(
   }
 );
 
-// update a guest
 router.patch(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(getGuestSchema, "params"),
   validatorHandler(updateGuestSchema, "body"),
   async (req, res, next) => {
@@ -104,9 +102,10 @@ router.patch(
   }
 );
 
-// delete a guest
 router.delete(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(deleteGuestSchema, "params"),
   async (req, res, next) => {
     try {
@@ -121,7 +120,7 @@ router.delete(
 
 module.exports = router;
 
- /** --------------------------- Swagger documentation --------------------------- */
+/** --------------------------- Swagger documentation --------------------------- */
 
 /**
  * @swagger
@@ -164,7 +163,6 @@ module.exports = router;
  *        phone: +513102259987
  *        identification: EC45962
  */
-
 
 /**
  * @swagger
@@ -279,7 +277,7 @@ module.exports = router;
  *      404:
  *        description: Guest not found
  */
-/** 
+/**
  * @swagger
  * /api/v1/guests/{id}:
  *  patch:

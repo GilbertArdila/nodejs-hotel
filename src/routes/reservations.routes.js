@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 
 const ReservationService = require("../services/reservation.service");
 const validatorHandler = require("../middlewares/validator.handler");
@@ -15,7 +16,6 @@ const {
 const router = express.Router();
 const service = new ReservationService();
 
-//get all reservations
 router.get("/", async (req, res, next) => {
   try {
     const reservations = await service.find();
@@ -25,7 +25,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// get one reservation by id
 router.get(
   "/:id",
   validatorHandler(getReservationSchema, "params"),
@@ -40,7 +39,9 @@ router.get(
   }
 );
 
-//get one reservation by checkIn
+/**
+ * this param must be like 12-25-03
+ */
 router.get(
   "/checkIn/:checkIn",
   validatorHandler(getReservationByCheckInSchema, "params"),
@@ -55,7 +56,6 @@ router.get(
   }
 );
 
-//get one reservation by room
 router.get(
   "/room/:room",
   validatorHandler(getReservationByRoomSchema, "params"),
@@ -70,7 +70,6 @@ router.get(
   }
 );
 
-//get one reservation by guestId
 router.get(
   "/guestId/:guestId",
   validatorHandler(getReservationByGuestIdSchema, "params"),
@@ -85,9 +84,10 @@ router.get(
   }
 );
 
-//create a new reservation
 router.post(
   "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(createReservationSchema, "body"),
   async (req, res, next) => {
     try {
@@ -100,9 +100,10 @@ router.post(
   }
 );
 
-//update a reservation
 router.patch(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(getReservationSchema, "params"),
   validatorHandler(updateReservationSchema, "body"),
   async (req, res, next) => {
@@ -117,9 +118,10 @@ router.patch(
   }
 );
 
-//delete a reservation
 router.delete(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
   validatorHandler(deleteReservationSchema, "params"),
   async (req, res, next) => {
     try {
@@ -134,7 +136,7 @@ router.delete(
 
 module.exports = router;
 
- /** --------------------------- Swagger documentation --------------------------- */
+/** --------------------------- Swagger documentation --------------------------- */
 
 /**
  * @swagger
@@ -171,7 +173,6 @@ module.exports = router;
  *        guestId: 10
  *        totalAmount: 65
  */
-
 
 /**
  * @swagger
@@ -290,7 +291,7 @@ module.exports = router;
  * @swagger
  * /api/v1/reservations/guestId/{guestId}:
  *  get:
- *    summary: return all the reservations linked with a speciffic gest 
+ *    summary: return all the reservations linked with a speciffic gest
  *    tags: [Reservation]
  *    parameters:
  *      - in: path
@@ -298,7 +299,7 @@ module.exports = router;
  *        schema:
  *          type: integer
  *        required: true
- *        description: this is the guest id 
+ *        description: this is the guest id
  *    responses:
  *      200:
  *        description: returns all the reservations found
