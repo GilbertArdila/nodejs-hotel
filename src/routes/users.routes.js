@@ -1,6 +1,8 @@
 const express = require("express");
+const passport = require("passport");
 
 const UserService = require("./../services/user.service");
+const { checkRole } = require("../middlewares/auth.handler");
 const validatorHandler = require("../middlewares/validator.handler");
 const {
   createUserSchema,
@@ -12,21 +14,26 @@ const {
 const router = express.Router();
 const service = new UserService();
 
-
-
-router.get("/", async (req, res, next) => {
-  try {
-    const users = await service.find();
-    res.json(users);
-  } catch (error) {
-    next(error);
+router.get(
+  "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
+  async (req, res, next) => {
+    try {
+      const users = await service.find();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
   }
-});
-
-
+);
 
 router.get(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
   validatorHandler(getUserSchema, "params"),
   async (req, res, next) => {
     try {
@@ -39,31 +46,43 @@ router.get(
   }
 );
 
-
-router.get("/email/:email", async (req, res, next) => {
-  try {
-    const { email } = req.params;
-    const user = await service.findByEmail(email);
-    res.json(user);
-  } catch (error) {
-    next(error);
+router.get(
+  "/email/:email",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
+  async (req, res, next) => {
+    try {
+      const { email } = req.params;
+      const user = await service.findByEmail(email);
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-
-router.get("/role/:role", async (req, res, next) => {
-  try {
-    const { role } = req.params;
-    const users = await service.findByRole(role);
-    res.json(users);
-  } catch (error) {
-    next(error);
+router.get(
+  "/role/:role",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
+  async (req, res, next) => {
+    try {
+      const { role } = req.params;
+      const users = await service.findByRole(role);
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
   }
-});
-
+);
 
 router.post(
   "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
   validatorHandler(createUserSchema, "body"),
   async (req, res, next) => {
     try {
@@ -76,10 +95,11 @@ router.post(
   }
 );
 
-
-
 router.patch(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
   validatorHandler(getUserSchema, "params"),
   validatorHandler(updateUserSchema, "body"),
   async (req, res, next) => {
@@ -94,9 +114,11 @@ router.patch(
   }
 );
 
-
 router.delete(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin"),
   validatorHandler(deleteUserSchema, "params"),
   async (req, res, next) => {
     try {
@@ -111,8 +133,7 @@ router.delete(
 
 module.exports = router;
 
-
-        /** --------------------------- Swagger documentation --------------------------- */
+/** --------------------------- Swagger documentation --------------------------- */
 
 /**
  * @swagger
@@ -145,7 +166,6 @@ module.exports = router;
  *        email: chepe@gmail.com
  *        password: chepe123
  */
-
 
 /**
  * @swagger

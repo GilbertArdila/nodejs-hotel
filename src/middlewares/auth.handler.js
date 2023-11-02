@@ -1,13 +1,14 @@
 const boom = require('@hapi/boom');
 
-function checkRole(req, res, next){
-    console.log(req.user);
+function checkRole(...roles){
+    return(req, res, next)=>{
     const user = req.user;
-    if(user.role === 'admin'){
+    if(roles.includes(user.role)){
         next();
     }else{
-        next(boom.unauthorized('you deon not have the authorized role to do this action'))
+        next(boom.unauthorized('you do not have authorization to do this action'))
     }
+}
 }
     
     module.exports = {checkRole}

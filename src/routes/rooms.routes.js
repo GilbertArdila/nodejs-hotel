@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 
 const RoomService = require("../services/room.service");
-const {checkRole} = require('../middlewares/auth.handler');
+const { checkRole } = require("../middlewares/auth.handler");
 const validatorHandler = require("../middlewares/validator.handler");
 const {
   createRoomSchema,
@@ -17,17 +17,26 @@ const {
 const router = express.Router();
 const service = new RoomService();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const rooms = await service.find();
-    res.json(rooms);
-  } catch (error) {
-    next(error);
+router.get(
+  "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
+  async (req, res, next) => {
+    try {
+      const rooms = await service.find();
+      res.json(rooms);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getRoomSchema, "params"),
   async (req, res, next) => {
     try {
@@ -42,6 +51,9 @@ router.get(
 
 router.get(
   "/type/:type",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getRoomByTypeSchema, "params"),
   async (req, res, next) => {
     try {
@@ -56,6 +68,9 @@ router.get(
 
 router.get(
   "/status/:status",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getRoomByStatusSchema, "params"),
   async (req, res, next) => {
     try {
@@ -70,6 +85,9 @@ router.get(
 
 router.get(
   "/number/:number",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getRoomByNumberSchema, "params"),
   async (req, res, next) => {
     try {
@@ -86,7 +104,7 @@ router.post(
   "/",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole,
+  checkRole("admin"),
   validatorHandler(createRoomSchema, "body"),
   async (req, res, next) => {
     try {
@@ -103,7 +121,7 @@ router.patch(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole,
+  checkRole("admin"),
   validatorHandler(getRoomSchema, "params"),
   validatorHandler(updateRoomSchema, "body"),
   async (req, res, next) => {
@@ -122,7 +140,7 @@ router.delete(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole,
+  checkRole("admin"),
   validatorHandler(deleteRoomSchema, "params"),
   async (req, res, next) => {
     try {

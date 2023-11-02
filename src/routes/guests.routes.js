@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 
 const GuestService = require("../services/guest.service");
-const {checkRole} = require('../middlewares/auth.handler');
+const { checkRole } = require("../middlewares/auth.handler");
 const validatorHandler = require("../middlewares/validator.handler");
 const {
   createGuestSchema,
@@ -16,17 +16,26 @@ const {
 const router = express.Router();
 const service = new GuestService();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const guests = await service.find();
-    res.json(guests);
-  } catch (error) {
-    next(error);
+router.get(
+  "/",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
+  async (req, res, next) => {
+    try {
+      const guests = await service.find();
+      res.json(guests);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get(
   "/:id",
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getGuestSchema, "params"),
   async (req, res, next) => {
     try {
@@ -41,7 +50,9 @@ router.get(
 
 router.get(
   "/email/:email",
-
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getGuestByEmailSchema, "params"),
   async (req, res, next) => {
     try {
@@ -56,7 +67,9 @@ router.get(
 
 router.get(
   "/identification/:identification",
-
+  //protegemos la ruta con JWT auth
+  passport.authenticate("jwt", { session: false }),
+  checkRole("admin", "user"),
   validatorHandler(getGuestByIdentificationSchema, "params"),
   async (req, res, next) => {
     try {
@@ -73,7 +86,7 @@ router.post(
   "/",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole,
+  checkRole("admin"),
   validatorHandler(createGuestSchema, "body"),
   async (req, res, next) => {
     try {
@@ -90,7 +103,7 @@ router.patch(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole,
+  checkRole("admin"),
   validatorHandler(getGuestSchema, "params"),
   validatorHandler(updateGuestSchema, "body"),
   async (req, res, next) => {
@@ -109,7 +122,7 @@ router.delete(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole,
+  checkRole("admin"),
   validatorHandler(deleteGuestSchema, "params"),
   async (req, res, next) => {
     try {
