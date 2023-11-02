@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 
 const RoomService = require("../services/room.service");
+const {checkRole} = require('../middlewares/auth.handler');
 const validatorHandler = require("../middlewares/validator.handler");
 const {
   createRoomSchema,
@@ -85,6 +86,7 @@ router.post(
   "/",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(createRoomSchema, "body"),
   async (req, res, next) => {
     try {
@@ -101,6 +103,7 @@ router.patch(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(getRoomSchema, "params"),
   validatorHandler(updateRoomSchema, "body"),
   async (req, res, next) => {
@@ -119,6 +122,7 @@ router.delete(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(deleteRoomSchema, "params"),
   async (req, res, next) => {
     try {

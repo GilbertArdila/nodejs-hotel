@@ -69,10 +69,20 @@ class UserService{
 
     async update(id, changes){
         const userFound = await models.User.findByPk(id);
+       
         if(!userFound){
             throw boom.notFound('User not found');
         }
+        // si la actualización realizada contiene password lo encriptamos
+        if(changes.password){
+            const hashedPassword = await bcrypt.hash(changes.password, 10);
+            changes.password = hashedPassword;
+        }
+        
+        
         const response = await userFound.update(changes);
+        
+         
         return response;
         
        

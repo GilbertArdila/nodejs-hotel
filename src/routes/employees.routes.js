@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 
 const EmployeeService = require("../services/employee.service");
+const {checkRole} = require('../middlewares/auth.handler');
 const validatorHandler = require("../middlewares/validator.handler");
 const {
   createEmployeeSchema,
@@ -90,6 +91,7 @@ router.post(
   "/",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(createEmployeeSchema, "body"),
   async (req, res, next) => {
     try {
@@ -106,6 +108,7 @@ router.patch(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(getEmployeeSchema, "params"),
   validatorHandler(updateEmployeeSchema, "body"),
   async (req, res, next) => {
@@ -124,6 +127,7 @@ router.delete(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(deleteEmployeeSchema, "params"),
   async (req, res, next) => {
     try {

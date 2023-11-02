@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 
 const GuestService = require("../services/guest.service");
+const {checkRole} = require('../middlewares/auth.handler');
 const validatorHandler = require("../middlewares/validator.handler");
 const {
   createGuestSchema,
@@ -72,6 +73,7 @@ router.post(
   "/",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(createGuestSchema, "body"),
   async (req, res, next) => {
     try {
@@ -88,6 +90,7 @@ router.patch(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(getGuestSchema, "params"),
   validatorHandler(updateGuestSchema, "body"),
   async (req, res, next) => {
@@ -106,6 +109,7 @@ router.delete(
   "/:id",
   //protegemos la ruta con JWT auth
   passport.authenticate("jwt", { session: false }),
+  checkRole,
   validatorHandler(deleteGuestSchema, "params"),
   async (req, res, next) => {
     try {
