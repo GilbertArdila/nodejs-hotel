@@ -38,7 +38,7 @@ class GuestService{
             }
         });
         if (!guest){
-            throw boom.notFound('Guest not found');
+            throw boom.notFound('Guest not found, Please check the email information');
         }
         return guest;
     }
@@ -50,7 +50,7 @@ class GuestService{
             }
         });
         if (!guest){
-            throw boom.notFound('Guest not found');
+            throw boom.notFound('Please check the identification, we could not find any coincidence');
         }
         return guest;
     }
@@ -66,6 +66,7 @@ class GuestService{
                 id:id
             }
         });
+        console.log(response)
         return response;
     }
 
@@ -75,7 +76,7 @@ class GuestService{
             throw boom.notFound('Guest not found');
         }
         await guestFound.destroy();
-        return {message: 'Guest deleted'};
+        return {message: `The guest with id ${id} was deleted`};
     }
 }
 

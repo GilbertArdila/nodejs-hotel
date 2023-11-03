@@ -15,23 +15,23 @@ router.post(
 
   async (req, res, next) => {
     try {
-      //recuperamos el usuario del request desde el local strategy
+      //got the user from local strategy
       const user = req.user;
 
-      //creamos el payload
+      //do the payload
       const payload = {
         sub: user.id,
         role: user.role,
       };
 
-      //creamos el token en el cual por seguridad solo enviamos el rol y el id del usuario
-      const token = jwt.sign(payload, config.jwtSecret);
+      //do token, only send rol and user´s id
+      const token = jwt.sign(payload, config.jwtSecret,{expiresIn: '15m'});
 
-      //borramos estos datos de la respuesta
+      //delete data from before answer
       delete user.dataValues.createdAt;
       delete user.dataValues.updatedAt;
 
-      //retornamos el ususario y el token
+      //return user and token
       res.json({ user, token });
     } catch (error) {
       next(error);
@@ -40,3 +40,47 @@ router.post(
 );
 
 module.exports = router;
+
+/** --------------------------- Swagger documentation --------------------------- */
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Auth:
+ *      type: object
+ *      properties:
+ *        email:
+ *          type: string
+ *          description: user´s email adress
+ *        password:
+ *          type: string
+ *          description: user´s password
+ *      required:
+ *        - email
+ *        - password
+ *      example:
+ *        email: superadmin@gmail.com
+ *        password: "123456"
+ *       
+ */
+
+
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *  post:
+ *    summary: get the user´s credentials to return a token, this will last for 15 minutes
+ *    tags: [Auth]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Auth'
+ *    responses:
+ *      200:
+ *        description: returns the necessary acces token
+ */
+

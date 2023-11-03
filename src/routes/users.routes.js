@@ -16,7 +16,7 @@ const service = new UserService();
 
 router.get(
   "/",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   async (req, res, next) => {
@@ -31,7 +31,7 @@ router.get(
 
 router.get(
   "/:id",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(getUserSchema, "params"),
@@ -48,7 +48,7 @@ router.get(
 
 router.get(
   "/email/:email",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   async (req, res, next) => {
@@ -64,7 +64,7 @@ router.get(
 
 router.get(
   "/role/:role",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   async (req, res, next) => {
@@ -80,7 +80,7 @@ router.get(
 
 router.post(
   "/",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(createUserSchema, "body"),
@@ -97,7 +97,7 @@ router.post(
 
 router.patch(
   "/:id",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(getUserSchema, "params"),
@@ -116,7 +116,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(deleteUserSchema, "params"),

@@ -1,4 +1,6 @@
 const boom = require('@hapi/boom');
+
+
 const {models} = require('../libs/sequelize');
 
 
@@ -38,7 +40,7 @@ class RoomService{
                 }
             });
             if (room.length < 1){
-                throw boom.notFound('Sorry we can not find a room with this specific type, please check your request again');
+                throw boom.notFound('Sorry we could not find a room with this specific type, please check your request again');
             }
             return room;
         }
@@ -50,7 +52,7 @@ class RoomService{
                 }
             });
             if (room.length < 1 ){
-                throw boom.notFound('Sorry we can not find a room with that specific status, please check again your request');
+                throw boom.notFound('Sorry we could not find a room with that specific status, please check again your request');
             }
             return room;
         }
@@ -62,7 +64,7 @@ class RoomService{
                 }
             });
             if (!room){
-                throw boom.notFound('We are sorry, can not find that number of room');
+                throw boom.notFound('We are sorry, could not find that number of room');
             }
             return room;
         }
@@ -82,7 +84,7 @@ class RoomService{
                 throw boom.notFound('Room not found');
             }
             await roomFound.destroy();
-            return {message: 'Room deleted'};
+            return {message: `The room with the id ${id} was deleted`};
         }
     }
 

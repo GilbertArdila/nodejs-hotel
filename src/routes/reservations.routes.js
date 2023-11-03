@@ -10,7 +10,7 @@ const {
   getReservationSchema,
   getReservationByCheckInSchema,
   getReservationByRoomSchema,
-  getReservationByGuestIdSchema,
+  getReservationByGuestSchema,
   deleteReservationSchema,
 } = require("../schemas/reservation.dto");
 
@@ -19,7 +19,7 @@ const service = new ReservationService();
 
 router.get(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   async (req, res, next) => {
@@ -34,7 +34,7 @@ router.get(
 
 router.get(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getReservationSchema, "params"),
@@ -50,11 +50,11 @@ router.get(
 );
 
 /**
- * this param must be like 12-25-03
+ * this param must be like 12-25-03 (MM/DD/YY)
  */
 router.get(
   "/checkIn/:checkIn",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getReservationByCheckInSchema, "params"),
@@ -70,15 +70,15 @@ router.get(
 );
 
 router.get(
-  "/room/:room",
-  //protegemos la ruta con JWT auth
+  "/room/:roomId",
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getReservationByRoomSchema, "params"),
   async (req, res, next) => {
     try {
-      const { room } = req.params;
-      const reservation = await service.findByRoom(room);
+      const { roomId } = req.params;
+      const reservation = await service.findByRoom(roomId);
       res.json(reservation);
     } catch (error) {
       next(error);
@@ -88,10 +88,10 @@ router.get(
 
 router.get(
   "/guestId/:guestId",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
-  validatorHandler(getReservationByGuestIdSchema, "params"),
+  validatorHandler(getReservationByGuestSchema, "params"),
   async (req, res, next) => {
     try {
       const { guestId } = req.params;
@@ -105,7 +105,7 @@ router.get(
 
 router.post(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(createReservationSchema, "body"),
@@ -122,7 +122,7 @@ router.post(
 
 router.patch(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(getReservationSchema, "params"),
@@ -141,7 +141,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(deleteReservationSchema, "params"),

@@ -18,7 +18,7 @@ const service = new GuestService();
 
 router.get(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   async (req, res, next) => {
@@ -33,7 +33,7 @@ router.get(
 
 router.get(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getGuestSchema, "params"),
@@ -50,7 +50,7 @@ router.get(
 
 router.get(
   "/email/:email",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getGuestByEmailSchema, "params"),
@@ -67,7 +67,7 @@ router.get(
 
 router.get(
   "/identification/:identification",
-  //protegemos la ruta con JWT auth
+  //WT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getGuestByIdentificationSchema, "params"),
@@ -84,7 +84,7 @@ router.get(
 
 router.post(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(createGuestSchema, "body"),
@@ -101,7 +101,7 @@ router.post(
 
 router.patch(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(getGuestSchema, "params"),
@@ -111,6 +111,7 @@ router.patch(
       const { id } = req.params;
       const body = req.body;
       const guest = await service.update(id, body);
+      console.log('route: ', guest)
       res.json(guest);
     } catch (error) {
       next(error);
@@ -120,7 +121,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(deleteGuestSchema, "params"),

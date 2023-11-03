@@ -1,6 +1,9 @@
 const boom = require('@hapi/boom');
-const {models} = require('../libs/sequelize');
 const bcrypt = require('bcrypt');
+
+
+const {models} = require('../libs/sequelize');
+
 
 class UserService{
   constructor(){
@@ -8,15 +11,15 @@ class UserService{
   }
 
     async create(user){
-        //encriptamos el password
+        //encript the password
         const hashedPassword = await bcrypt.hash(user.password, 10);
 
-        //actualizamos el password en la información recibida
+        //update the password information
         const newUser = await models.User.create({
             ...user,
             password: hashedPassword
         });
-        //borramos el password de la data retornada
+        //delete the password before the answer
         delete newUser.dataValues.password;
         return newUser;
     }
@@ -37,7 +40,7 @@ class UserService{
             }
         });
         if(!user){
-            throw boom.notFound('sorry, please check your information again');
+            throw boom.notFound('sorry, please check your email again, we could not find any coincidence');
         }
         
         return user;
@@ -50,7 +53,7 @@ class UserService{
             }
         });
         if(!users){
-            throw boom.notFound('Sorry we can not find any user with that specific role, please check it again');
+            throw boom.notFound('Sorry we could not find any user with that specific role, please check it again');
         }
         users.forEach(user =>{
             delete user.dataValues.password;
@@ -73,7 +76,7 @@ class UserService{
         if(!userFound){
             throw boom.notFound('User not found');
         }
-        // si la actualización realizada contiene password lo encriptamos
+        // if password exist, encript it
         if(changes.password){
             const hashedPassword = await bcrypt.hash(changes.password, 10);
             changes.password = hashedPassword;

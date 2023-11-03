@@ -19,7 +19,7 @@ const service = new EmployeeService();
 
 router.get(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   async (req, res, next) => {
@@ -35,7 +35,7 @@ router.get(
 router.get(
   "/:id",
 
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getEmployeeSchema, "params"),
@@ -53,7 +53,7 @@ router.get(
 router.get(
   "/email/:email",
 
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getEmployeeByEmailSchema, "params"),
@@ -70,7 +70,7 @@ router.get(
 
 router.get(
   "/identification/:identification",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getEmployeeByIdentificationSchema, "params"),
@@ -88,7 +88,7 @@ router.get(
 router.get(
   "/status/:status",
 
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getEmployeeByStatusSchema, "params"),
@@ -105,7 +105,7 @@ router.get(
 
 router.post(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(createEmployeeSchema, "body"),
@@ -122,7 +122,7 @@ router.post(
 
 router.patch(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(getEmployeeSchema, "params"),
@@ -141,7 +141,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(deleteEmployeeSchema, "params"),

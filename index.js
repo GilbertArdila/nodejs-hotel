@@ -1,4 +1,9 @@
 const express = require("express");
+//swagger
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
+
 const routerApi = require("./src/routes");
 const {
   logErrors,
@@ -7,9 +12,6 @@ const {
   ormErrorHandler,
 } = require("./src/middlewares/error.handler");
 
-//swagger
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
 
 //cors
 const cors = require("cors");
@@ -61,11 +63,11 @@ const options = {
 };
 app.use(cors(options));
 
-//llamando las estrategias
+//strategies call
 require('./src/auth');
 
 app.get("/", (req, res) => {
-  res.send("Hello World con Node.js!");
+  res.send("Please use the base endpoint api/v1");
 });
 
 routerApi(app);

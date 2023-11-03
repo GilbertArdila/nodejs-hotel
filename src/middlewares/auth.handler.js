@@ -6,7 +6,7 @@ function checkRole(...roles){
     if(roles.includes(user.role)){
         next();
     }else{
-        next(boom.unauthorized('you do not have authorization to do this action'))
+        next(boom.unauthorized())
     }
 }
 }

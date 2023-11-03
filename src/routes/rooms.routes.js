@@ -19,7 +19,7 @@ const service = new RoomService();
 
 router.get(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   async (req, res, next) => {
@@ -34,7 +34,7 @@ router.get(
 
 router.get(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getRoomSchema, "params"),
@@ -51,7 +51,7 @@ router.get(
 
 router.get(
   "/type/:type",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getRoomByTypeSchema, "params"),
@@ -68,7 +68,7 @@ router.get(
 
 router.get(
   "/status/:status",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getRoomByStatusSchema, "params"),
@@ -85,7 +85,7 @@ router.get(
 
 router.get(
   "/number/:number",
-  //protegemos la ruta con JWT auth
+  // JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin", "user"),
   validatorHandler(getRoomByNumberSchema, "params"),
@@ -102,7 +102,7 @@ router.get(
 
 router.post(
   "/",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(createRoomSchema, "body"),
@@ -119,7 +119,7 @@ router.post(
 
 router.patch(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(getRoomSchema, "params"),
@@ -138,7 +138,7 @@ router.patch(
 
 router.delete(
   "/:id",
-  //protegemos la ruta con JWT auth
+  //JWT auth
   passport.authenticate("jwt", { session: false }),
   checkRole("admin"),
   validatorHandler(deleteRoomSchema, "params"),

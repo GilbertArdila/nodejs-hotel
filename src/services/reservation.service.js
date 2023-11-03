@@ -1,4 +1,6 @@
 const boom = require("@hapi/boom");
+
+
 const { models } = require("../libs/sequelize");
 const { compareDates, isCheckInToday } = require("../helpers/verifyData");
 
@@ -47,7 +49,7 @@ class ReservationService {
   async findOne(id) {
     const reservation = await models.Reservation.findByPk(id);
     if (!reservation) {
-      throw boom.notFound("Reservation not found");
+      throw boom.notFound("Reservation id not found");
     }
     return reservation;
   }
@@ -59,31 +61,32 @@ class ReservationService {
       },
     });
     if (!reservation) {
-      throw boom.notFound("Reservation not found");
+      throw boom.notFound("Sorry, we could not find any reservation´s coincidence");
     }
     return reservation;
   }
 
-  async findByRoom(room) {
+  async findByRoom(roomId) {
     const reservation = await models.Reservation.findAll({
       where: {
-        room: room,
+        roomId: roomId,
       },
     });
     if (!reservation) {
-      throw boom.notFound("Sorry we can not found any reservation linked to that room");
+      throw boom.notFound("Sorry we could not find any reservation linked to that room");
     }
     return reservation;
   }
 
   async findByGuestId(guestId) {
     const reservation = await models.Reservation.findAll({
+      include: ["room", "guest"],
       where: {
         guestId: guestId,
       },
     });
     if (!reservation) {
-      throw boom.notFound("Sorry we can not found any reservation linked to that gest");
+      throw boom.notFound("Sorry we could not find any reservation linked to that gest");
     }
     return reservation;
   }

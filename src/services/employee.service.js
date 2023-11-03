@@ -1,4 +1,6 @@
 const boom = require('@hapi/boom');
+
+
 const {models} = require('../libs/sequelize');
 
 class EmployeeService{
@@ -33,7 +35,7 @@ class EmployeeService{
             }
         });
         if (!employee){
-            throw boom.notFound('We can not find any email coincidence, please try again or check your email info');
+            throw boom.notFound('Please check your email, we could not find any email coincidence');
         }
         return employee;
     }
@@ -57,7 +59,7 @@ class EmployeeService{
             }
         });
         if (employee.length <1){
-            throw boom.notFound('Sorry, we can not find any employee with that specific status, please check the sended information');
+            throw boom.notFound('Sorry, we could not find any employee with that specific status, please check the role information');
         }
         return employee;
     }
@@ -65,7 +67,7 @@ class EmployeeService{
     async update(id, employee){
         const actualEmployee = await models.Employee.findByPk(id)
         if(!actualEmployee){
-            throw boom.notFound('Sorry, we can not find any employee with that specific id, please check the sended information');
+            throw boom.notFound('Sorry, we could not find any employee with that specific id, please check the id information');
         }
         const updateEmployee = await models.Employee.update(employee,{
             where: {
@@ -78,7 +80,7 @@ class EmployeeService{
     async delete(id){
         const employee = await models.Employee.findByPk(id);
         if(!employee){
-            throw boom.notFound('Sorry, we can not find any employee with that specific id, please check the sended information');
+            throw boom.notFound('Sorry, we could not find any employee with that specific id, please check the id information');
         }
          await models.Employee.destroy({
             where: {
