@@ -1,5 +1,7 @@
 const boom = require("@hapi/boom");
 const cron = require('node-cron');
+const CronJob = require('cron').CronJob;
+
 
 
 const { models } = require("../libs/sequelize");
@@ -29,10 +31,15 @@ class ReservationService {
       );
     }
 
-    //checking if the reservation day is today
-    if (isCheckInToday(checkIn)) {
-      await room.update({ status: "occupied" });
+    //checking if the reservation day is today using cron library
+    async function executeAt5AM()  {
+      if (isCheckInToday(checkIn)) {
+        await room.update({ status: "occupied" });
+      }
     }
+    
+    // this code executes the job every day at  5 a.m.
+    const job = new CronJob('0 5 * * *', executeAt5AM, null, true, 'America/New_York');
 
     
 // checking if checkout date is as current day to change the status of room to maintenace and if maintenace status was set more tha 24 horas ago it chsnge to available
