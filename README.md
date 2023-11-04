@@ -22,6 +22,13 @@ Tenemos una ruta base para todas nuestros endpoints, excepto la documentación, 
   - Método: POST
   - Descripción: Nos permite loguearnos usando email y password y nos otorga un token de acceso
 
+### Recovery
+
+- Recuperar la contraseña de un usuario registrado
+  - URL: `/auth/recovery`
+  - Método: POST
+  - Descripción: Enviamos el correo electronico registrado en el sistema y recibimos en el un link para la recuperación de la contraseña
+
 ### Empleados (Employees)
 
 - Consultar todos los empleados

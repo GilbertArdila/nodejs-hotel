@@ -1,12 +1,13 @@
 const express = require("express");
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
 
-const { config } = require("../config/config");
 const validatorHandler = require("../middlewares/validator.handler");
 const { loginSchema } = require("../schemas/login.dto");
 
+const AuthService = require("../services/auth.service");
+
 const router = express.Router();
+const service = new AuthService();
 
 router.post(
   "/login",
@@ -15,29 +16,23 @@ router.post(
 
   async (req, res, next) => {
     try {
-      //got the user from local strategy
       const user = req.user;
-
-      //do the payload
-      const payload = {
-        sub: user.id,
-        role: user.role,
-      };
-
-      //do token, only send rol and user´s id
-      const token = jwt.sign(payload, config.jwtSecret,{expiresIn: '15m'});
-
-      //delete data from before answer
-      delete user.dataValues.createdAt;
-      delete user.dataValues.updatedAt;
-
-      //return user and token
-      res.json({ user, token });
+      res.json(service.signToken(user));
     } catch (error) {
       next(error);
     }
   }
 );
+
+router.post("/recovery", async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const rta = await service.sendEmail(email);
+    res.json(rta);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
 
@@ -62,9 +57,8 @@ module.exports = router;
  *      example:
  *        email: superadmin@gmail.com
  *        password: "123456"
- *       
+ *
  */
-
 
 /**
  * @swagger
@@ -84,3 +78,20 @@ module.exports = router;
  *        description: returns the necessary acces token
  */
 
+/**
+ * @swagger
+ * /api/v1/auth/recovery:
+ *  post:
+ *    summary: here you can send your email adress to recover your account password
+ *    tags: [Auth]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Auth'
+ *    responses:
+ *      200:
+ *        description: returns a link to  recover the password
+ */
