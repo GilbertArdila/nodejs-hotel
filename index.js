@@ -33,6 +33,9 @@ const swaggerSpec = {
         {
           url: "http://localhost:3001",
         },
+        {
+          url:"https://nodejs-hotel.onrender.com"
+        }
       ],
     },
   },
@@ -51,7 +54,7 @@ app.use(
 );
 
 //cors whitelist
-const whitelist = ["http://localhost:3001", "https://myapp.co"];
+const whitelist = ["http://localhost:3001", "https://nodejs-hotel.onrender.com"];
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {
