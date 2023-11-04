@@ -17,8 +17,8 @@ const service = new UserService();
 router.get(
   "/",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   async (req, res, next) => {
     try {
       const users = await service.find();
@@ -32,8 +32,8 @@ router.get(
 router.get(
   "/:id",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   validatorHandler(getUserSchema, "params"),
   async (req, res, next) => {
     try {
@@ -49,8 +49,8 @@ router.get(
 router.get(
   "/email/:email",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   async (req, res, next) => {
     try {
       const { email } = req.params;
@@ -65,8 +65,8 @@ router.get(
 router.get(
   "/role/:role",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   async (req, res, next) => {
     try {
       const { role } = req.params;
@@ -81,8 +81,8 @@ router.get(
 router.post(
   "/",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   validatorHandler(createUserSchema, "body"),
   async (req, res, next) => {
     try {
@@ -98,8 +98,8 @@ router.post(
 router.patch(
   "/:id",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   validatorHandler(getUserSchema, "params"),
   validatorHandler(updateUserSchema, "body"),
   async (req, res, next) => {
@@ -117,8 +117,8 @@ router.patch(
 router.delete(
   "/:id",
   // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  //passport.authenticate("jwt", { session: false }),
+  //checkRole("admin"),
   validatorHandler(deleteUserSchema, "params"),
   async (req, res, next) => {
     try {
