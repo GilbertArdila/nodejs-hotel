@@ -13,7 +13,8 @@ const config = {
   jwtSecret: process.env.JWT_SECRET,
   mailPassword: process.env.MAIL_PASSWORD,
   mailAdress: process.env.MAIL_ADRESS,
-  sttpServer: process.env.STTP_SERVER
+  sttpServer: process.env.STTP_SERVER,
+  frontendRecoveryView: process.env.FRONTEND_RECOVERY_VIEW
 };
 
 module.exports = { config };

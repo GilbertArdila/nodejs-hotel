@@ -22,6 +22,13 @@ Tenemos una ruta base para todas nuestros endpoints, excepto la documentación, 
   - Método: POST
   - Descripción: Nos permite loguearnos usando email y password y nos otorga un token de acceso
 
+### change-password
+
+- Recuperar la contraseña
+  - URL: `/auth/change-password`
+  - Método: POST
+  - Descripción: Nos permite recuperar la contraseña, recibe el token generado y la nueva contraseña (newPpassword)  
+
 ### Recovery
 
 - Recuperar la contraseña de un usuario registrado

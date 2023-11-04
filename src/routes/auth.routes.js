@@ -2,7 +2,8 @@ const express = require("express");
 const passport = require("passport");
 
 const validatorHandler = require("../middlewares/validator.handler");
-const { loginSchema } = require("../schemas/login.dto");
+const { loginSchema,recoverySchema,changePasswordAuthSchema } = require("../schemas/auth");
+
 
 const AuthService = require("../services/auth.service");
 
@@ -17,6 +18,8 @@ router.post(
   async (req, res, next) => {
     try {
       const user = req.user;
+      
+      
       res.json(service.signToken(user));
     } catch (error) {
       next(error);
@@ -24,10 +27,24 @@ router.post(
   }
 );
 
-router.post("/recovery", async (req, res, next) => {
+router.post("/recovery", 
+validatorHandler(recoverySchema, "body"),
+async (req, res, next) => {
   try {
     const { email } = req.body;
-    const rta = await service.sendEmail(email);
+    const rta = await service.sendRecoveryPassword(email);
+    res.json(rta);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/change-password",
+validatorHandler(changePasswordAuthSchema, "body"),
+async (req, res, next) => {
+  try {
+    const { token, newPassword } = req.body;
+    const rta = await service.changePassword(token, newPassword);
     res.json(rta);
   } catch (error) {
     next(error);
@@ -80,6 +97,24 @@ module.exports = router;
 
 /**
  * @swagger
+ * /api/v1/auth/change-password:
+ *  post:
+ *    summary: this is the endpoint to recover the password
+ *    tags: [Auth]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/Auth'
+ *    responses:
+ *      200:
+ *        description: receive the token and the new password
+ */
+
+/**
+ * @swagger
  * /api/v1/auth/recovery:
  *  post:
  *    summary: here you can send your email adress to recover your account password
@@ -95,3 +130,5 @@ module.exports = router;
  *      200:
  *        description: returns a link to  recover the password
  */
+
+
