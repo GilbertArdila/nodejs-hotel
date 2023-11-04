@@ -1,4 +1,5 @@
 const boom = require("@hapi/boom");
+const cron = require('node-cron');
 
 
 const { models } = require("../libs/sequelize");
@@ -32,6 +33,51 @@ class ReservationService {
     if (isCheckInToday(checkIn)) {
       await room.update({ status: "occupied" });
     }
+
+    
+// checking if checkout date is as current day to change the status of room to maintenace and if maintenace status was set more tha 24 horas ago it chsnge to available
+cron.schedule('0 15 * * *', async () => {
+  const currentDate = new Date();
+
+  // find all reservations whit checkout date is equal as today
+  const reservations = await models.Reservation.findAll({
+    where: {
+      checkOut: currentDate,
+    },
+  });
+
+  for (const reservation of reservations) {
+    const room = await models.Room.findByPk(reservation.roomId);
+
+    if (!room) {
+      console.log("Room not found for reservation");
+      continue;
+    }
+
+    // change the status to "maintenance"
+    await room.update({ status: "maintenance" });
+  }
+
+  // find all rooms with "maintenance" status
+  const maintenanceRooms = await models.Room.findAll({
+    where: {
+      status: "maintenance",
+    },
+  });
+
+  for (const room of maintenanceRooms) {
+    // if it is older than  24 hours since  "maintenance" status was set
+    const maintenanceStartTime = new Date(room.updatedAt);
+    maintenanceStartTime.setHours(maintenanceStartTime.getHours() + 24);
+
+    if (currentDate >= maintenanceStartTime) {
+      // change it to "available"
+      await room.update({ status: "available" });
+    }
+  }
+});
+
+    
 
     const newReservation = await models.Reservation.create({
       ...reservation,
