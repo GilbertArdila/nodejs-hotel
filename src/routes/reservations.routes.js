@@ -107,7 +107,7 @@ router.post(
   "/",
   //JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  checkRole("admin","user"),
   validatorHandler(createReservationSchema, "body"),
   async (req, res, next) => {
     try {
@@ -124,7 +124,7 @@ router.patch(
   "/:id",
   //JWT auth
   passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
+  checkRole("admin","user"),
   validatorHandler(getReservationSchema, "params"),
   validatorHandler(updateReservationSchema, "body"),
   async (req, res, next) => {

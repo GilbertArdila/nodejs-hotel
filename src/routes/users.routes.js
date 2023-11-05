@@ -80,9 +80,6 @@ router.get(
 
 router.post(
   "/",
-  // JWT auth
-  passport.authenticate("jwt", { session: false }),
-  checkRole("admin"),
   validatorHandler(createUserSchema, "body"),
   async (req, res, next) => {
     try {
@@ -317,7 +314,7 @@ module.exports = router;
  * @swagger
  * /api/v1/users:
  *  post:
- *    summary: this is the endpoint to create a user
+ *    summary: this is the endpoint to create a user, it does not require Autorization credentials
  *    tags: [User]
  *    requestBody:
  *      required: true
